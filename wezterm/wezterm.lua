@@ -10,6 +10,8 @@ local config = {
     font_size = 12,
     font = fonts.get_font(),
     color_scheme = "catppuccin-mocha",
+    window_close_confirmation = "NeverPrompt",
+    hide_tab_bar_if_only_one_tab = true,
     window_padding = {
         left = 40,
         right = 20,
@@ -20,21 +22,23 @@ local config = {
     use_fancy_tab_bar = false,
     colors = {
         tab_bar = {
-            background = "rgba(0,0,0,0.85)"
+            background = "rgba(0,0,0,0.85)",
         },
-        scrollbar_thumb = "rgba(0,0,0)"
+        scrollbar_thumb = "rgba(0,0,0)",
     },
     initial_cols = 200,
     initial_rows = 40,
-    background = { {
-        source = {
-            File = wezterm.config_dir .. "/background/darknoise.jpg"
+    background = {
+        {
+            source = {
+                File = wezterm.config_dir .. "/background/darknoise.jpg",
+            },
+            hsb = {
+                brightness = 1,
+            },
+            opacity = 0.85,
         },
-        hsb = {
-            brightness = 1,
-        },
-        opacity = 0.85,
-    } },
+    },
     keys = {
         keys.cmd_key(
             "R",
@@ -42,8 +46,8 @@ local config = {
                 action.SendKey({ key = "\x1b" }),
                 keys.multiple_actions(":w"),
             })
-        )
-    }
+        ),
+    },
 }
 
 wezterm.on("gui-startup", function()
