@@ -19,6 +19,15 @@ return {
 			telescope.setup({
 				defaults = {
 					path_display = { "smart" },
+					layout_config = {
+						horizontal = {
+							preview_width = 0.75,
+							results_width = 0.2,
+							preview_cutoff = 1,
+						},
+						width = 0.87,
+						height = 0.80,
+					},
 					mappings = {
 						i = {
 							["<C-k>"] = actions.move_selection_previous,
@@ -60,6 +69,8 @@ return {
 			telescope.load_extension("live_grep_args")
 			telescope.load_extension("undo")
 			telescope.load_extension("fzf")
+
+			vim.cmd([[ autocmd User TelescopePreviewerLoaded setlocal number ]])
 		end,
 	},
 }
