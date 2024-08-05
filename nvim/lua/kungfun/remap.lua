@@ -58,3 +58,7 @@ keymap("n", "<leader>lr", vim.lsp.buf.rename, opts)
 keymap("n", "<leader>lf", vim.lsp.buf.format, opts)
 -- keymap("n", "<leader>li", require("telescope.builtin").lsp_implementatopts, opts)
 -- keymap("n", "<leader>lw", require("telescope.builtin").diagnostics, opts)
+--
+
+keymap("n", "<leader>nn", "<cmd>NoNeckPain<cr>", opts)
+vim.cmd([[ autocmd VimResized * if (&columns > 80) | set columns=80 | endif ]])

@@ -8,7 +8,14 @@ vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
-vim.opt.wrap = false 
+vim.opt.wrap = true
+-- enable indentation
+vim.cmd([[ set breakindent ]])
+-- ident by an additional 2 characters on wrapped lines, when line >= 40 characters, put 'showbreak' at start of line
+vim.cmd([[ set breakindentopt=shift:4,min:80,sbr ]])
+-- append '>>' to indent
+vim.cmd([[ set showbreak=>>>  ]])
+vim.cmd([[ set autoindent ]])
 vim.opt.mousescroll = "ver:1,hor:0"
 
 vim.opt.swapfile = false
@@ -32,7 +39,7 @@ vim.opt.updatetime = 50
 vim.opt.colorcolumn = "80"
 
 -- vim.cmd[[colorscheme tokyonight-night]]
-vim.cmd[[colorscheme catppuccin]]
+vim.cmd([[colorscheme catppuccin]])
 -- vim.cmd[[colorscheme github_dark_high_contrast]]
 -- vim.cmd[[colorscheme cyberdream]]
 

@@ -36,6 +36,7 @@ return {
 		end,
 	},
 	"levouh/tint.nvim",
+	{ "shortcuts/no-neck-pain.nvim", version = "*" },
 	-- TODO: learn how to use
 	"stevearc/dressing.nvim",
 }
