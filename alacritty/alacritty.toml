@@ -1,0 +1,46 @@
+import = [
+    "~/.config/alacritty/themes/tokyonight.toml",
+    #"~/.config/alacritty/themes/pine-rose.toml",
+    #"~/.config/alacritty/themes/github_dark_high_contrast.toml",
+]
+
+live_config_reload = true
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+decorations = "buttonless"
+dynamic_title = true
+opacity = 0.925
+startup_mode = "Maximized"
+
+[window.padding]
+x = 12
+y = 10
+
+[font]
+size = 15
+
+[font.bold]
+family = "JetBrainsMonoNL Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "JetBrainsMonoNL Nerd Font"
+style = "Italic"
+
+[font.normal]
+family = "JetBrainsMonoNL Nerd Font"
+style = "Regular"
+
+[font.glyph_offset]
+x = 0
+y = 2
+
+[font.offset]
+x = 0
+y = 5
+
+[colors]
+draw_bold_text_with_bright_colors = true
