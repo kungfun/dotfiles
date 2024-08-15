@@ -17,14 +17,14 @@ local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 local yank_group = augroup("HighlightYank", {})
 autocmd("TextYankPost", {
-	group = yank_group,
-	pattern = "*",
-	callback = function()
-		vim.highlight.on_yank({
-			higroup = "IncSearch",
-			timeout = 250,
-		})
-	end,
+    group = yank_group,
+    pattern = "*",
+    callback = function()
+        vim.highlight.on_yank({
+            higroup = "IncSearch",
+            timeout = 250,
+        })
+    end,
 })
 
 -- next greatest remap ever : asbjornHaland
@@ -39,33 +39,33 @@ keymap("n", "<C-j>", "<C-w>j", { noremap = true, silent = true })
 keymap("n", "<C-k>", "<C-w>k", { noremap = true, silent = true })
 keymap("n", "<C-l>", "<C-w>l", { noremap = true, silent = true })
 
-keymap("n", "<C-S-j>", ":m .+1<CR>==", opts) -- move line up(n)
-keymap("n", "<C-S-k>", ":m .-2<CR>==", opts) -- move line down(n)
+keymap("n", "<C-S-j>", ":m .+1<CR>==", opts)     -- move line up(n)
+keymap("n", "<C-S-k>", ":m .-2<CR>==", opts)     -- move line down(n)
 keymap("v", "<C-S-j>", ":m '>+1<CR>gv=gv", opts) -- move line up(v)
 keymap("v", "<C-S-k>", ":m '<-2<CR>gv=gv", opts) -- move line down(v)
 
 keymap("v", "<leader>y", '"+y', opts)
 
 keymap({ "n", "v" }, "<C-f>", function()
-	require("conform").format({
-		lsp_fallback = true,
-		async = false,
-		timeout_ms = 500,
-	})
+    require("conform").format({
+        lsp_fallback = true,
+        async = false,
+        timeout_ms = 500,
+    })
 end, {
-	noremap = true,
-	silent = true,
-	desc = "Format file or range (in visual mode)",
+    noremap = true,
+    silent = true,
+    desc = "Format file or range (in visual mode)",
 })
---
--- vim.api.nvim_create_autocmd("BufWritePre", {
--- 	pattern = "*",
--- 	callback = function(args)
--- 		require("conform").format({ bufnr = args.buf, lsp_fallback = true })
--- 	end,
--- })
 
-keymap("n", "<leader>ff", "<cmd>lua require('telescope.builtin').find_files({})<cr>", opts)
+vim.api.nvim_create_autocmd("BufWritePre", {
+    pattern = "*",
+    callback = function(args)
+        require("conform").format({ bufnr = args.buf, lsp_fallback = true })
+    end,
+})
+
+keymap("n", "<leader>ff", require('telescope.builtin').find_files, opts)
 keymap("n", "<leader>fo", '<cmd>lua require("telescope.builtin").oldfiles({})<cr>', opts)
 keymap("n", "<leader>fe", '<cmd>lua require("telescope.builtin").buffers({})<cr>', opts)
 keymap("n", "<leader>fg", '<cmd>lua require("telescope").extensions.live_grep_args.live_grep_args()<cr>', opts)
@@ -90,51 +90,51 @@ vim.api.nvim_set_hl(0, "ZenBg", { ctermbg = 0 })
 -- Terminal Window
 local Terminal = require("toggleterm.terminal").Terminal
 local terminal = Terminal:new({
-	direction = "float",
-	-- hidden = true,
-	float_opts = {
-		border = "rounded",
-		width = 80,
-		height = 10,
-	},
-	-- function to run on opening the terminal
-	on_open = function(term)
-		vim.cmd("startinsert!")
-		vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
-	end,
-	-- function to run on closing the terminal
-	on_close = function(term)
-		vim.cmd("startinsert!")
-	end,
+    direction = "float",
+    -- hidden = true,
+    float_opts = {
+        border = "rounded",
+        width = 80,
+        height = 10,
+    },
+    -- function to run on opening the terminal
+    on_open = function(term)
+        vim.cmd("startinsert!")
+        vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
+    end,
+    -- function to run on closing the terminal
+    on_close = function(term)
+        vim.cmd("startinsert!")
+    end,
 })
 
 function open_terminal()
-	terminal:toggle()
+    terminal:toggle()
 end
 
 keymap("n", "<leader>tt", "<cmd>lua open_terminal()<cr>", opts)
 
 -- LazyGit
 local lazygit_terminal = Terminal:new({
-	cmd = "lazygit",
-	direction = "float",
-	-- hidden = true,
-	float_opts = {
-		border = "rounded",
-	},
-	-- function to run on opening the terminal
-	on_open = function(term)
-		vim.cmd("startinsert!")
-		vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
-	end,
-	-- function to run on closing the terminal
-	on_close = function(term)
-		vim.cmd("startinsert!")
-	end,
+    cmd = "lazygit",
+    direction = "float",
+    -- hidden = true,
+    float_opts = {
+        border = "rounded",
+    },
+    -- function to run on opening the terminal
+    on_open = function(term)
+        vim.cmd("startinsert!")
+        vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
+    end,
+    -- function to run on closing the terminal
+    on_close = function(term)
+        vim.cmd("startinsert!")
+    end,
 })
 
 function open_lazygit()
-	lazygit_terminal:toggle()
+    lazygit_terminal:toggle()
 end
 
 keymap("n", "<leader>gg", "<cmd>lua open_lazygit()<cr>", opts)

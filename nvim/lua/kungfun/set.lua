@@ -28,7 +28,7 @@ vim.opt.incsearch = true
 
 vim.opt.termguicolors = true
 vim.opt.background = "dark" -- colorschemes that can be light or dark will be made dark
-vim.opt.signcolumn = "yes" -- show sign column so that text doesn't shift
+vim.opt.signcolumn = "yes"  -- show sign column so that text doesn't shift
 
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
@@ -36,14 +36,14 @@ vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
 
-vim.opt.colorcolumn = "80"
+-- vim.opt.colorcolumn = "80"
 
--- vim.cmd[[colorscheme tokyonight-night]]
-vim.cmd([[colorscheme catppuccin]])
--- vim.cmd[[colorscheme github_dark_high_contrast]]
+-- vim.cmd [[colorscheme tokyonight-night]]
+-- vim.cmd([[colorscheme catppuccin]])
+-- vim.cmd [[colorscheme github_dark_high_contrast]]
 -- vim.cmd[[colorscheme cyberdream]]
 
-vim.cmd([[ 
+vim.cmd([[
     "only for vim
     highlight Normal guibg=None
     highlight NonText guibg=None
@@ -76,6 +76,7 @@ vim.cmd([[
     highlight FoldColumn guibg=None
     highlight QuickmenuHelp guibg=None
     highlight FloatBorder guibg=None
+
 
 
     highlight NeoTreeNormal guibg=None
