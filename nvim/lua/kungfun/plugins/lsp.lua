@@ -31,12 +31,12 @@ return {
         config = function()
             local lsp_zero = require("lsp-zero")
 
-            lsp_zero.on_attach(function(client, bufnr)
-                lsp_zero.default_keymaps({ buffer = bufnr })
-            end)
-            lsp_zero.extend_lspconfig({
-                capabilities = require("cmp_nvim_lsp").default_capabilities(),
-            })
+			lsp_zero.on_attach(function(client, bufnr)
+				lsp_zero.default_keymaps({ buffer = bufnr })
+			end)
+			lsp_zero.extend_lspconfig({
+				capabilities = require("cmp_nvim_lsp").default_capabilities(),
+			})
 
             vim.g.rustaceanvim = {
                 server = {
@@ -44,9 +44,37 @@ return {
                 },
             }
 
-            require("mason").setup({
-                ui = {
-                    icons = { package_installed = "✓", package_pending = "➜", package_uninstalled = "✗" },
+			require("mason").setup({
+				ui = {
+					icons = { package_installed = "✓", package_pending = "➜", package_uninstalled = "✗" },
+
+					border = "rounded",
+					widht = 0.8,
+					height = 0.8,
+				},
+			})
+
+			local handlers = {
+				["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
+				["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" }),
+			}
+
+			require("mason-lspconfig").setup({
+				ensure_installed = {
+					"lua_ls",
+					"rust_analyzer",
+					"gopls",
+					"marksman",
+				},
+				handlers = {
+					function(server_name)
+						require("lspconfig")[server_name].setup({ handlers = handlers })
+					end,
+					rust_analyzer = lsp_zero.noop,
+				},
+			})
+			local cmp_action = require("lsp-zero").cmp_action()
+			local cmp = require("cmp")
 
                     border = "rounded",
                     widht = 0.8,
