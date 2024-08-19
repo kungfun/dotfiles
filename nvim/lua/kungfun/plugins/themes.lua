@@ -58,6 +58,12 @@ return {
 			require("tint").setup()
 		end,
 	},
+	{
+		"petertriho/nvim-scrollbar",
+		config = function()
+			require("scrollbar").setup({})
+		end,
+	},
 	-- TODO: learn how to use
 	"stevearc/dressing.nvim",
 }
