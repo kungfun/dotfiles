@@ -1,9 +1,11 @@
 local wezterm = require('wezterm')
 local keys = require('utils/keys')
-local helpers = require('utils/helpers')
 local fonts = require('fonts/fonts')
+local colors = require('colors/colors')
 local mux = wezterm.mux
 local action = wezterm.action
+
+wezterm.GLOBAL.colors_cache = wezterm.GLOBAL.colors_cache or {}
 
 local config = {
     window_decorations = 'RESIZE',
@@ -15,7 +17,7 @@ local config = {
     window_padding = {
         left = 20,
         right = 10,
-        top = 15,
+
         bottom = 10,
     },
 
@@ -29,17 +31,17 @@ local config = {
         background = 'rgba(1,1,1)',
     },
     initial_rows = 40,
-    -- background = {
-    --     {
-    --         source = {
-    --             File = wezterm.config_dir .. '/background/darknoise.jpg',
-    --         },
-    --         hsb = {
-    --             brightness = 0.2,
-    --         },
-    --         opacity = 0.95,
-    --     },
-    -- },
+    background = {
+        {
+            source = {
+                File = wezterm.config_dir .. '/background/darknoise.jpg',
+            },
+            hsb = {
+                brightness = 0.2,
+            },
+            opacity = 0.95,
+        },
+    },
     keys = {
         keys.cmd_key(
             'R',
@@ -49,28 +51,45 @@ local config = {
             })
         ),
     },
+    daemon_options = {
+        stdout = '~/logs/wezterm/stdout',
+        stderr = '~/logs/wezterm/stderr',
+    }
 }
 
-function get_file_name(path)
-    local start, finish = path:find('[%w%s!-={-|]+[_%.].+')
-    pcall(function()
-        return path:sub(start, #path)
-    end)
-end
-
-wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
-    local lbl
-    for shlindex = 1, #custom_shells do
-        if tab.active_pane.title:match(custom_shells[shlindex].args[1], 1, true) then
-            lbl = custom_shells[shlindex].label
-            break
-        end
-    end
-    return string.format(' %-15s ', lbl or get_file_name(tab.active_pane.title) or tab.active_pane.title)
-end)
-
+-- function get_file_name(path)
+--     local start, finish = path:find('[%w%s!-={-|]+[_%.].+')
+--     pcall(function()
+--         return path:sub(start, #path)
+--     end)
+-- end
+--
+-- wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
+--     local lbl
+--     for shlindex = 1, #custom_shells do
+--         if tab.active_pane.title:match(custom_shells[shlindex].args[1], 1, true) then
+--             lbl = custom_shells[shlindex].label
+--             break
+--         end
+--     end
+--     return string.format(' %-15s ', lbl or get_file_name(tab.active_pane.title) or tab.active_pane.title)
+-- end)
+--
 wezterm.on('gui-startup', function()
     local tab, pane, window = mux.spawn_window {}
+
+    local id = tostring(window:window_id())
+
+    local color = colors.get_color(id)
+    local overrides = window.get_config_overrides()
+    local window_frame = {
+        border_bottom_height = '0.5cell',
+        border_bottom_color = color,
+    }
+
+    overrides.window_frame = window_frame
+    window.set_config_overrides(overrides)
+
     window:gui_window():maximize()
 end)
 
@@ -85,190 +104,37 @@ wezterm.on('window-config-reloaded', function(window, pane)
     local is_new_window = not seen[id]
     -- and update the mapping
     seen[id] = true
-    wezterm.GLOBAL.seen_windows = seen
 
-    local colors = {
-        'grey',
-        'red',
-        'lime',
-        'yellow',
-        'blue',
-        'fuchsia',
-        'aqua',
-        'white',
-        'maroon',
-        'green',
-        'navy',
-        'purple',
-        'teal',
-        'silver',
-        'AliceBlue',
-        'AntiqueWhite',
-        'Aqua',
-        'Aquamarine',
-        'Azure',
-        'Beige',
-        'Bisque',
-        'Black',
-        'BlanchedAlmond',
-        'Blue',
-        'BlueViolet',
-        'Brown',
-        'BurlyWood',
-        'CadetBlue',
-        'Chartreuse',
-        'Chocolate',
-        'Coral',
-        'CornflowerBlue',
-        'Cornsilk',
-        'Crimson',
-        'Cyan',
-        'DarkBlue',
-        'DarkCyan',
-        'DarkGoldenRod',
-        'DarkGray',
-        'DarkGrey',
-        'DarkGreen',
-        'DarkKhaki',
-        'DarkMagenta',
-        'DarkOliveGreen',
-        'Darkorange',
-        'DarkOrchid',
-        'DarkRed',
-        'DarkSalmon',
-        'DarkSeaGreen',
-        'DarkSlateBlue',
-        'DarkSlateGray',
-        'DarkSlateGrey',
-        'DarkTurquoise',
-        'DarkViolet',
-        'DeepPink',
-        'DeepSkyBlue',
-        'DimGray',
-        'DimGrey',
-        'DodgerBlue',
-        'FireBrick',
-        'FloralWhite',
-        'ForestGreen',
-        'Fuchsia',
-        'Gainsboro',
-        'GhostWhite',
-        'Gold',
-        'GoldenRod',
-        'Gray',
-        'Grey',
-        'Green',
-        'GreenYellow',
-        'HoneyDew',
-        'HotPink',
-        'IndianRed',
-        'Indigo',
-        'Ivory',
-        'Khaki',
-        'Lavender',
-        'LavenderBlush',
-        'LawnGreen',
-        'LemonChiffon',
-        'LightBlue',
-        'LightCoral',
-        'LightCyan',
-        'LightGoldenRodYellow',
-        'LightGray',
-        'LightGrey',
-        'LightGreen',
-        'LightPink',
-        'LightSalmon',
-        'LightSeaGreen',
-        'LightSkyBlue',
-        'LightSlateGray',
-        'LightSlateGrey',
-        'LightSteelBlue',
-        'LightYellow',
-        'Lime',
-        'LimeGreen',
-        'Linen',
-        'Magenta',
-        'Maroon',
-        'MediumAquaMarine',
-        'MediumBlue',
-        'MediumOrchid',
-        'MediumPurple',
-        'MediumSeaGreen',
-        'MediumSlateBlue',
-        'MediumSpringGreen',
-        'MediumTurquoise',
-        'MediumVioletRed',
-        'MidnightBlue',
-        'MintCream',
-        'MistyRose',
-        'Moccasin',
-        'NavajoWhite',
-        'Navy',
-        'OldLace',
-        'Olive',
-        'OliveDrab',
-        'Orange',
-        'OrangeRed',
-        'Orchid',
-        'PaleGoldenRod',
-        'PaleGreen',
-        'PaleTurquoise',
-        'PaleVioletRed',
-        'PapayaWhip',
-        'PeachPuff',
-        'Peru',
-        'Pink',
-        'Plum',
-        'PowderBlue',
-        'Purple',
-        'Red',
-        'RosyBrown',
-        'RoyalBlue',
-        'SaddleBrown',
-        'Salmon',
-        'SandyBrown',
-        'SeaGreen',
-        'SeaShell',
-        'Sienna',
-        'Silver',
-        'SkyBlue',
-        'SlateBlue',
-        'SlateGray',
-        'SlateGrey',
-        'Snow',
-        'SpringGreen',
-        'SteelBlue',
-        'Tan',
-        'Teal',
-        'Thistle',
-        'Tomato',
-        'Turquoise',
-        'Violet',
-        'Wheat',
-        'White',
-        'WhiteSmoke',
-        'Yellow',
-        'YellowGreen'
-    }
+    if is_new_window then
+        local color = colors.get_color(id)
 
-    local color = helpers.get_random_entry(colors)
+        wezterm.GLOBAL.seen_windows = seen
 
-    overrides.window_frame = {
-        border_left_width = '0.5cell',
-        border_right_width = '0.5cell',
-        border_bottom_height = '0.25cell',
-        border_top_height = '0.25cell',
-        border_left_color = color,
-        border_right_color = color,
-        border_bottom_color = color,
-        border_top_color = color,
-    }
+        overrides.window_frame = {
+            border_bottom_height = '0.5cell',
+            border_bottom_color = color,
+        }
 
+        window:set_config_overrides(overrides)
+    end
 
-    window:set_config_overrides(overrides)
     -- now act upon the flag
     if is_new_window then
         window:maximize()
+    end
+end)
+
+wezterm.GLOBAL.parse_count = (wezterm.GLOBAL.parse_count or 0) + 1
+
+wezterm.on('update-right-status', function(window, pane)
+    local id = tostring(window:window_id())
+
+    local colors_cache = wezterm.GLOBAL.colors_cache
+
+    if colors_cache[id] ~= nil then
+        window:set_right_status(id .. tostring(colors_cache[id]) .. ': Reloads=' .. tostring(wezterm.GLOBAL.parse_count))
+    else
+        window:set_right_status(id .. ': Reloads=' .. tostring(wezterm.GLOBAL.parse_count))
     end
 end)
 
