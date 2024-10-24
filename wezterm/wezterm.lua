@@ -105,18 +105,54 @@ wezterm.on('window-config-reloaded', function(window, pane)
     -- and update the mapping
     seen[id] = true
 
-    if is_new_window then
-        local color = colors.get_color(id)
+    wezterm.log_info('window id' .. wezterm.to_string(id))
+    wezterm.GLOBAL.seen_windows = seen
 
-        wezterm.GLOBAL.seen_windows = seen
+    local colors_cache = wezterm.GLOBAL.colors_cache
+    local clear_colors_cache = {}
+    local clear_seen_windows = {}
 
-        overrides.window_frame = {
-            border_bottom_height = '0.5cell',
-            border_bottom_color = color,
-        }
+    for _, workspace_window in ipairs(mux.all_windows()) do
+        local window_id = workspace_window:window_id()
 
-        window:set_config_overrides(overrides)
+        for w_id, color in pairs(colors_cache) do
+            wezterm.log_info('clear cache' .. wezterm.to_string(w_id))
+            wezterm.log_info('clear cache' .. wezterm.to_string(window_id))
+            if wezterm.to_string(w_id) == wezterm.to_string(window_id) then
+                clear_colors_cache[w_id] = color
+            end
+        end
+
+        for seen_window, is_seen in pairs(seen) do
+            clear_seen_windows[seen_window] = false
+
+            wezterm.log_info('clear cache seen ' .. wezterm.to_string(seen_window))
+            wezterm.log_info('clear cache seen ' .. wezterm.to_string(window_id))
+            if wezterm.to_string(seen_window) == wezterm.to_string(window_id) then
+                clear_seen_windows[seen_window] = true
+            end
+        end
+
+        wezterm.log_info(window_id)
     end
+
+    wezterm.log_info('clear cache' .. wezterm.to_string(clear_colors_cache))
+
+    wezterm.GLOBAL.seen_windows = clear_seen_windows
+    wezterm.GLOBAL.colors_cache = clear_colors_cache
+
+
+    -- if is_new_window then
+    local color = colors.get_color(id)
+
+
+    overrides.window_frame = {
+        border_bottom_height = '0.5cell',
+        border_bottom_color = color,
+    }
+
+    window:set_config_overrides(overrides)
+    -- end
 
     -- now act upon the flag
     if is_new_window then
