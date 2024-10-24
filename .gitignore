@@ -4,11 +4,7 @@
 
 # Allow files under
 # Wezterm
-!/wezterm
 /wezterm/background
-
-# Neovim
-!/nvim
 
 !.gitignore
 
