@@ -1,10 +1,15 @@
 # Ignore everything
 *
-!*/
 
 # Allow files under
 # Wezterm
-/wezterm/background
+!wezterm/
+!wezterm/*
+wezterm/background
+
+# Neovim
+!nvim/
+!nvim/*
 
 !.gitignore
 
