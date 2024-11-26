@@ -11,6 +11,10 @@ wezterm/background
 !nvim/
 !nvim/*/*
 
+# ZSH
+!zsh/
+!zsh/*/*
+
 !.gitignore
 
 

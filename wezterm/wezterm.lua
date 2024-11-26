@@ -12,7 +12,9 @@ local config = {
     enable_tab_bar = true,
     font_size = 14,
     font = fonts.get_font(),
+    freetype_load_target = "Normal",
     color_scheme = 'catppuccin-mocha',
+    pane_select_font_size = 72,
     window_close_confirmation = 'NeverPrompt',
     window_padding = {
         left = 20,
@@ -42,8 +44,22 @@ local config = {
             opacity = 0.95,
         },
     },
+    inactive_pane_hsb = {
+        saturation = 0.1,
+        brightness = 0.1,
+    },
+    leader = { key = 'Space', mods = 'CTRL|SHIFT' },
     keys = {
-        keys.cmd_key(
+        {
+            key = 'w',
+            mods = 'ALT',
+            action = action.ActivateKeyTable {
+                name = 'activate_pane',
+                timeout_milliseconds = 1000,
+            },
+        },
+        { key = 'P', mods = 'ALT', action = action.PaneSelect },
+        keys.cmd_ctrl_key(
             'R',
             action.Multiple({
                 action.SendKey({ key = '\x1b' }),
@@ -51,11 +67,53 @@ local config = {
             })
         ),
     },
+
+    key_tables = {
+        activate_pane = {
+            { key = 'LeftArrow',  action = action.ActivatePaneDirection 'Left' },
+            { key = 'h',          action = action.ActivatePaneDirection 'Left' },
+
+            { key = 'RightArrow', action = action.ActivatePaneDirection 'Right' },
+            { key = 'l',          action = action.ActivatePaneDirection 'Right' },
+
+            { key = 'UpArrow',    action = action.ActivatePaneDirection 'Up' },
+            { key = 'k',          action = action.ActivatePaneDirection 'Up' },
+
+            { key = 'DownArrow',  action = action.ActivatePaneDirection 'Down' },
+            { key = 'j',          action = action.ActivatePaneDirection 'Down' },
+
+            { key = 'g',          action = action.SplitHorizontal { domain = 'CurrentPaneDomain' } },
+            { key = 'v',          action = action.SplitVertical { domain = 'CurrentPaneDomain' } },
+
+            { key = 'q',          action = action.CloseCurrentPane { confirm = false } },
+        },
+    },
+
     daemon_options = {
         stdout = '~/logs/wezterm/stdout',
         stderr = '~/logs/wezterm/stderr',
     }
 }
+
+wezterm.on('gui-startup', function(cmd)
+    local tab, pane, window = mux.spawn_window(cmd or {})
+    -- Create a split occupying the right 1/3 of the screen
+    pane:split { size = 0.3 }
+    -- Create another split in the right of the remaining 2/3
+    -- of the space; the resultant split is in the middle
+    -- 1/3 of the display and has the focus.
+    pane:split { size = 0.5 }
+end)
+
+
+-- Show which key table is active in the status area
+wezterm.on('update-right-status', function(window, pane)
+    local name = window:active_key_table()
+    if name then
+        name = 'TABLE: ' .. name
+    end
+    window:set_right_status(name or '')
+end)
 
 -- function get_file_name(path)
 --     local start, finish = path:find('[%w%s!-={-|]+[_%.].+')
@@ -161,17 +219,5 @@ wezterm.on('window-config-reloaded', function(window, pane)
 end)
 
 wezterm.GLOBAL.parse_count = (wezterm.GLOBAL.parse_count or 0) + 1
-
-wezterm.on('update-right-status', function(window, pane)
-    local id = tostring(window:window_id())
-
-    local colors_cache = wezterm.GLOBAL.colors_cache
-
-    if colors_cache[id] ~= nil then
-        window:set_right_status(id .. tostring(colors_cache[id]) .. ': Reloads=' .. tostring(wezterm.GLOBAL.parse_count))
-    else
-        window:set_right_status(id .. ': Reloads=' .. tostring(wezterm.GLOBAL.parse_count))
-    end
-end)
 
 return config
