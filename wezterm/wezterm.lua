@@ -48,13 +48,34 @@ local config = {
         saturation = 0.1,
         brightness = 0.1,
     },
+    unix_domains = {
+        {
+            name = 'unix',
+        },
+    },
     leader = { key = 'Space', mods = 'CTRL|SHIFT' },
     keys = {
         {
             key = 'w',
             mods = 'ALT',
             action = action.ActivateKeyTable {
-                name = 'activate_pane',
+                name = 'pane_mode',
+                timeout_milliseconds = 1000,
+            },
+        },
+        {
+            key = 'e',
+            mods = 'ALT',
+            action = action.ActivateKeyTable {
+                name = 'tab_mode',
+                timeout_milliseconds = 1000,
+            },
+        },
+        {
+            key = 's',
+            mods = 'ALT',
+            action = action.ActivateKeyTable {
+                name = 'session_mode',
                 timeout_milliseconds = 1000,
             },
         },
@@ -69,7 +90,44 @@ local config = {
     },
 
     key_tables = {
-        activate_pane = {
+        session_mode = {
+            -- Attach to muxer
+            {
+                key = 'a',
+                action = action.AttachDomain 'unix',
+            },
+
+            -- Detach from muxer
+            {
+                key = 'd',
+                action = action.DetachDomain { DomainName = 'unix' },
+            },
+        },
+        tab_mode = {
+            {
+                key = 'r',
+                action = action.PromptInputLine {
+                    description = 'Enter new name for tab',
+                    action = wezterm.action_callback(
+                        function(window, pane, line)
+                            if line then
+                                window:active_tab():set_title(line)
+                            end
+                        end
+                    ),
+                },
+            },
+            {
+                key = 'n',
+                action = wezterm.action.ActivateTabRelative(1),
+            },
+            {
+                key = 'p',
+                action = wezterm.action.ActivateTabRelative(-1),
+            },
+
+        },
+        pane_mode = {
             { key = 'LeftArrow',  action = action.ActivatePaneDirection 'Left' },
             { key = 'h',          action = action.ActivatePaneDirection 'Left' },
 
@@ -86,6 +144,7 @@ local config = {
             { key = 'v',          action = action.SplitVertical { domain = 'CurrentPaneDomain' } },
 
             { key = 'q',          action = action.CloseCurrentPane { confirm = false } },
+
         },
     },
 
