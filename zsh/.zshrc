@@ -3,6 +3,9 @@
 
 ###############################################################################
 # History file for zsh
+autoload -U compinit && compinit
+zstyle ':completion:*' menu select
+
 HISTFILE=~/.zsh_history
 
 HISTZISE=10000
@@ -21,9 +24,6 @@ bindkey '^ ' autosuggest-accept
 bindkey '^I' complete-word
 
 # Initialize Autocompletion
-autoload -U compinit && compinit
-zstyle ':completion:*' menu select
-
 ###############################################################################
 # Plugins
 
@@ -143,9 +143,19 @@ export PATH=$PATH:/usr/local/go/bin
 
 ### RISC-V
 export PATH=$PATH:/opt/riscv/bin
+export PATH=$PATH:/opt/riscv/musl/bin
+export PATH=$PATH:/opt/riscv/gnu/bin
+export PATH=$PATH:/opt/riscv/elf/bin
 
+### CMAKE
+export PATH=$PATH:/opt/cmake/bin
+
+### Ninja
+export PATH=$PATH:/home/user19/bin/ninja
+
+### LLVM
+export PATH=$PATH:/home/user19/bin/llvm-project-19/build-release/bin
 
 ###############################################################################
 # Aliases
 
-alias wezterm='flatpak run org.wezfurlong.wezterm'
