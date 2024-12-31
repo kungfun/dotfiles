@@ -8,7 +8,8 @@ local action = wezterm.action
 wezterm.GLOBAL.colors_cache = wezterm.GLOBAL.colors_cache or {}
 
 local config = {
-    window_decorations = 'RESIZE',
+    enable_wayland = false,
+    window_decorations = 'NONE',
     enable_tab_bar = true,
     font_size = 14,
     font = fonts.get_font(),
@@ -27,7 +28,7 @@ local config = {
     use_fancy_tab_bar = false,
     colors = {
         tab_bar = {
-            background = 'rgba(0,0,0,0.95)',
+            background = 'rgba(255,255,255,0.05)',
         },
         scrollbar_thumb = 'rgba(0,0,0)',
         background = 'rgba(1,1,1)',
@@ -39,9 +40,9 @@ local config = {
                 File = wezterm.config_dir .. '/background/darknoise.jpg',
             },
             hsb = {
-                brightness = 0.2,
+                brightness = 0.3,
             },
-            opacity = 0.95,
+            opacity = 0.9,
         },
     },
     inactive_pane_hsb = {
@@ -53,7 +54,6 @@ local config = {
             name = 'unix',
         },
     },
-    leader = { key = 'Space', mods = 'CTRL|SHIFT' },
     keys = {
         {
             key = 'w',
@@ -118,6 +118,10 @@ local config = {
                 },
             },
             {
+                key = 't',
+                action = action.SpawnTab('CurrentPaneDomain'),
+            },
+            {
                 key = 'n',
                 action = wezterm.action.ActivateTabRelative(1),
             },
@@ -128,6 +132,11 @@ local config = {
 
         },
         pane_mode = {
+            {
+                key = 'z',
+                action = wezterm.action.TogglePaneZoomState,
+            },
+
             { key = 'LeftArrow',  action = action.ActivatePaneDirection 'Left' },
             { key = 'h',          action = action.ActivatePaneDirection 'Left' },
 
@@ -153,17 +162,14 @@ local config = {
         stderr = '~/logs/wezterm/stderr',
     }
 }
-
 wezterm.on('gui-startup', function(cmd)
-    local tab, pane, window = mux.spawn_window(cmd or {})
-    -- Create a split occupying the right 1/3 of the screen
-    pane:split { size = 0.3 }
-    -- Create another split in the right of the remaining 2/3
-    -- of the space; the resultant split is in the middle
-    -- 1/3 of the display and has the focus.
-    pane:split { size = 0.5 }
-end)
+    local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
 
+    local gui_window = window:gui_window();
+    -- gui_window:perform_action(wezterm.action.ToggleFullScreen, pane)
+
+    gui_window():maximize()
+end)
 
 -- Show which key table is active in the status area
 wezterm.on('update-right-status', function(window, pane)
@@ -192,23 +198,6 @@ end)
 --     return string.format(' %-15s ', lbl or get_file_name(tab.active_pane.title) or tab.active_pane.title)
 -- end)
 --
-wezterm.on('gui-startup', function()
-    local tab, pane, window = mux.spawn_window {}
-
-    local id = tostring(window:window_id())
-
-    local color = colors.get_color(id)
-    local overrides = window.get_config_overrides()
-    local window_frame = {
-        border_bottom_height = '0.5cell',
-        border_bottom_color = color,
-    }
-
-    overrides.window_frame = window_frame
-    window.set_config_overrides(overrides)
-
-    window:gui_window():maximize()
-end)
 
 wezterm.on('window-config-reloaded', function(window, pane)
     -- approximately identify this gui window, by using the associated mux id
