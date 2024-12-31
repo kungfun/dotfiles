@@ -1,5 +1,8 @@
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 vim.g.mapleader = " "
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>pv", "<cmd>NvimTreeToggle<cr>")
 
 local opts = { noremap = true, silent = true }
 
@@ -75,7 +78,7 @@ keymap("n", "<leader>fu", "<cmd>Telescope undo<cr>", opts)
 
 keymap("n", "<leader>la", vim.lsp.buf.code_action, opts)
 -- keymap("n", "<leader>lA", vim.lsp.buf.range_code_action, opts)
-keymap("n", "<leader>li", "<cmd>lua require('telescope.builtin').lsp_implementations()<cr>", opts)
+keymap("n", "<leader>li", "<cmd>lua require('telescope.builtin').lsp_implementations()<cr>", xopts)
 keymap("n", "<leader>lr", "<cmd>lua require('telescope.builtin').lsp_references()<cr>", opts)
 keymap("n", "<leader>l[", "<cmd>lua require('telescope.builtin').lsp_incoming_calls()<cr>", opts)
 keymap("n", "<leader>l]", "<cmd>lua require('telescope.builtin').lsp_outgoing_calls()<cr>", opts)
