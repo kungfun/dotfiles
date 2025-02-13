@@ -14,6 +14,7 @@ wezterm/background
 # Tmux
 !tmux/
 !tmux/*/*
+tmux/plugins
 
 # Neovim
 !nvim/

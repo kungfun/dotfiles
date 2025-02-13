@@ -40,10 +40,11 @@ vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "80"
 
--- vim.cmd [[colorscheme tokyonight-night]]
--- vim.cmd([[colorscheme catppuccin]])
--- vim.cmd [[colorscheme github_dark_high_contrast]]
--- vim.cmd[[colorscheme cyberdream]]
+vim.api.nvim_create_autocmd("ExitPre", {
+    group = vim.api.nvim_create_augroup("Exit", { clear = true }),
+    command = "set guicursor=a:ver10",
+    desc = "Set cursor back to beam when leaving Neovim."
+})
 
 vim.on_key(function(char)
     if vim.fn.mode() == "n" then
