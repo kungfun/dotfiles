@@ -8,8 +8,8 @@ local action = wezterm.action
 wezterm.GLOBAL.colors_cache = wezterm.GLOBAL.colors_cache or {}
 
 local config = {
-    enable_wayland = false,
-    window_decorations = 'NONE',
+    -- enable_wayland = false,
+    -- window_decorations = 'RESIZE',
     enable_tab_bar = true,
     font_size = 14,
     font = fonts.get_font(),
@@ -42,7 +42,7 @@ local config = {
             hsb = {
                 brightness = 0.3,
             },
-            opacity = 0.9,
+            opacity = 0.8,
         },
     },
     inactive_pane_hsb = {
