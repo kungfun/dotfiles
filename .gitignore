@@ -7,6 +7,14 @@
 !wezterm/*/*
 wezterm/background
 
+# Alacritty
+!alacritty/
+!alacritty/*/*
+
+# Tmux
+!tmux/
+!tmux/*/*
+
 # Neovim
 !nvim/
 !nvim/*/*

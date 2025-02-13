@@ -65,6 +65,7 @@ return {
 					"rust_analyzer",
 					"gopls",
 					"marksman",
+					"pyright",
 				},
 				handlers = {
 					function(server_name)
@@ -149,6 +150,7 @@ return {
 					go = { "goimports", "gofmt" },
 					-- You can also customize some of the format options for the filetype
 					rust = { "rustfmt", lsp_format = "fallback" },
+					python = { "isort", "black" },
 					-- You can use a function here to determine the formatters dynamically
 					-- Use the "*" filetype to run formatters on all filetypes.
 					["*"] = { "codespell" },

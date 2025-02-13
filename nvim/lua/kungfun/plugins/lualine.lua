@@ -1,57 +1,48 @@
 function transparent_theme()
-        local colors = {
-            darkgray = "#16161d",
-            gray = "#727169",
-            innerbg = nil,
-            outerbg = "#16161D",
-            normal = "#7e9cd8",
-            insert = "#98bb6c",
-            visual = "#ffa066",
-            replace = "#e46876",
-            command = "#e6c384",
-        }
-        return {
-            inactive = {
-                a = { fg = colors.gray, bg = colors.outerbg, gui = "bold" },
-                b = { fg = colors.gray, bg = colors.outerbg },
-                c = { fg = colors.gray, bg = colors.innerbg },
-            },
-            visual = {
-                a = { fg = colors.darkgray, bg = colors.visual, gui = "bold" },
-                b = { fg = colors.gray, bg = colors.outerbg },
-                c = { fg = colors.gray, bg = colors.innerbg },
-            },
-            replace = {
-                a = { fg = colors.darkgray, bg = colors.replace, gui = "bold" },
-                b = { fg = colors.gray, bg = colors.outerbg },
-                c = { fg = colors.gray, bg = colors.innerbg },
-            },
-            normal = {
-                a = { fg = colors.darkgray, bg = colors.normal, gui = "bold" },
-                b = { fg = colors.gray, bg = colors.outerbg },
-                c = { fg = colors.gray, bg = colors.innerbg },
-            },
-            insert = {
-                a = { fg = colors.darkgray, bg = colors.insert, gui = "bold" },
-                b = { fg = colors.gray, bg = colors.outerbg },
-                c = { fg = colors.gray, bg = colors.innerbg },
-            },
-            command = {
-                a = { fg = colors.darkgray, bg = colors.command, gui = "bold" },
-                b = { fg = colors.gray, bg = colors.outerbg },
-                c = { fg = colors.gray, bg = colors.innerbg },
-            },
-        }
-    end
+	local colors = {
+		base03 = "#242424",
+		base023 = "#353535",
+		base02 = "#444444",
+		base01 = "#585858",
+		base00 = "#666666",
+		base0 = "#808080",
+		base1 = "#969696",
+		base2 = "#a8a8a8",
+		base3 = "#d0d0d0",
+		yellow = "#cae682",
+		orange = "#e5786d",
+		red = "#e5786d",
+		magenta = "#f2c68a",
+		blue = "#8ac6f2",
+		cyan = "#8ac6f2",
+		green = "#95e454",
+	}
+
+	return {
+		normal = {
+			a = { fg = colors.base02, bg = colors.blue, gui = "bold" },
+			b = { fg = colors.base02, bg = colors.base0 },
+			c = { fg = colors.base2, bg = colors.base02 },
+		},
+		insert = { a = { fg = colors.base02, bg = colors.green, gui = "bold" } },
+		visual = { a = { fg = colors.base02, bg = colors.magenta, gui = "bold" } },
+		replace = { a = { fg = colors.base023, bg = colors.red, gui = "bold" } },
+		inactive = {
+			a = { fg = colors.base1, bg = colors.base02, gui = "bold" },
+			b = { fg = colors.base023, bg = colors.base01 },
+			c = { fg = colors.base1, bg = colors.base023 },
+		},
+	}
+end
 
 return {
-    'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-        require("lualine").setup({
-            options = {
-                theme = transparent_theme()
-            }
-        })
-    end
+	"nvim-lualine/lualine.nvim",
+	dependencies = { "nvim-tree/nvim-web-devicons" },
+	config = function()
+		require("lualine").setup({
+			options = {
+				theme = transparent_theme(),
+			},
+		})
+	end,
 }
