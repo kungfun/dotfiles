@@ -102,6 +102,9 @@ return {
                     "rust_analyzer",
                     "gopls",
                     "marksman",
+                    "ts_ls",
+                    "eslint",
+                    "yamlls"
                 },
                 handlers = {
                     function(server_name)
