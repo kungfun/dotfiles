@@ -11,6 +11,10 @@ wezterm/background
 !alacritty/
 !alacritty/*/*
 
+# Fish
+!fish/
+!fish/*/*
+
 # Tmux
 !tmux/
 !tmux/*/*

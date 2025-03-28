@@ -117,10 +117,8 @@ function set-prompt() {
   local top_left='%F%n %~%f'
   local top_right="%F${git_branch}%f"
   local bottom_left='%B%F{%(?.green.red)}%#%f%b '
-  local bottom_right='%F{yellow}%*%f'
 
   PROMPT="$(fill-line "$top_left" "$top_right")"$'\n'$bottom_left
-  RPROMPT=$bottom_right
 }
 
 autoload -Uz add-zsh-hook
